@@ -1,494 +1,389 @@
 # Changelog
 
-List of changes for this repo, including `atomic-cli`, `atomic-server` and `atomic-lib`.
-By far most changes relate to `atomic-server`, so if not specified, assume the changes are relevant only for the server.
-**Changes to JS assets (including the front-end and JS libraries) are not shown here**, but in [`/browser/CHANGELOG`](/browser/CHANGELOG.md).
-See [STATUS.md](server/STATUS.md) to learn more about which features will remain stable.
+This changelog covers all three packages, as they are (for now) updated as a whole
 
 ## UNRELEASED
 
-- Use `musl` + `alpine` builds for docker images, way smaller images #620
-- Support multi-platform docker builds #731
-- Remove deprecated ENV vars #732
-
-## [v0.36.1] - 2023-12-06
-
-- Fix locally searching for atomicdata.dev resources in external servers #706
-- Use Earthly for CI: building, testing, pushing Docker images #576
-- Host @tomic NPM docs [on Netlify](https://atomic-lib.netlify.app/) #707
-- Deprecate Tauri Desktop build #718
-- Merge Docs repository into this one #719
-
-## [v0.36.0] - 2023-11-02
-
-- **Requires `--rebuild-index`**
-- Switch to monorepo. Include `atomic-data-browser` in this repo #216
-- Add Tables (edit, keyboard support, sorting, more) #638
-- The `parent` query param in `/search` has changed to `parents` and accepts an array of Subjects #677
-- Improve query performance, less index storage #678
-
-## [v0.34.3] - 2023-06-27
-
-- Remove `tpf` queries from `atomic-cli` #610
-- Fix `pageSize` property in Collections not using persistence
-- Add Table Ontology #25
-- Fix Post endpoints not including search params in returned `@id` field.
-- Rebuilding indexes done on separate thread, only once #616 #615
-- Don't require building index for populate commands
-- Refactor `for_agent` arguments to use the new `ForAgent` enum #623
-- Add support for Bearer token authentication, find in `/app/token` #632
-- Add a `query` endpoint that allows performing collection queries via an endpoint instead of repurposing the collections collection.
-- `resource.destroy` now recursively destroys its children.
-- Update JS assets, add History view
-
-## [v0.34.2] - 2023-03-04
-
-- **Requires `--rebuild-index`**
-- Improve full-text search, use JSON fields #335
-- Rename `setup-env` to `generate-dotenv` and build it from clap #599
-- Remove `remove_previous_search` and `asset_url` options
-- Parse multiple auth cookies #525
-- Fix `--script` flag
-- Add `Storelike::post_resource`, which allows plugins to parse HTTP POST requests #592
-- Move Server-Timing header to crate `simple-server-timing-header`
-- Add `POST` + `body` support for Endpoints #592
-- Refactor `Endpoint` handlers, uses a Context now #592
-- Re-build store + invite when adjusting server url #607
-- Use local atomic-server for properties and classes, improves atomic-server #604
-
-## [v0.34.1] - 2023-02-11
-
-- Improve query performance, refactor indexes. The `.tpf` API is deprecated in favor of the more powerful `.query`. #529
-- Replace `acme_lib` with `instant-acme`, drop OpenSSL dependency, add DNS verification for TLS option with `--https-dns` #192
-- Improved error handling for HTTPS initialization #530
-- Add `--force` to `atomic-server import` #536
-- Fix index issue happening when deleting a single property in a sorted collection #545
-- Update JS assets & playwright
-- Fix initial indexing bug #560
-- Fix errors on succesful export / import #565
-- Fix envs for store path, change `ATOMIC_STORE_DIR` to `ATOMIC_DATA_DIR` #567
-- Refactor static file asset hosting #578
-- Meta tags server side #577
-- Include JSON-AD in initial response, speed up first render #511
-- Remove feature to index external RDF files and search them #579
-- Add staging environment #588
-- Add systemd instructions to readme #271
-
-## [v0.34.0] - 2022-10-31
-
-- Add parent parameter to search endpoint which scopes a search to only the descendants of the given resource. #226
-- Bookmark endpoint now also retrieves `og:image` and `og:description` #510
-- Give server agent rights to edit all resources, fix issue with accepting invites in private drives #521
-- Add cookie based authentication #512
-- `Store::all_resources` returns `Iterator` instead of `Vec` #522 #487
-- Change authentication order #525
-- Fix cookie subject check #525
-
-## [v0.33.1] - 2022-09-25
-
-- Change how the sidebar resources are created
-- Update JS assets
-
-## [v0.33.0] - 2022-09-03
-
-- Use WebSockets for fetching resources and authentication. Faster than HTTP! #485
-- Added JSON-AD Importer
-- Add HTML Bookmarks features
-- Update Atomic-Data-Browser
-- Improve CLI errors for Atomic-Server #465
-- Fix default config directory, set it again to `~/.config/atomic`. This accidentally was `~` since v0.32.0.
-- Fix flaky query test #468
-- Don't subscribe to external resources #470
-- Improve frequency search indexing #473
-- Add HTML importer / bookmarks endpoint #432
-- Allow new `Drive` resources without a parent
-- Refactor end-to-end tests
-
-## [v0.32.2] - 2022-06-20
-
-- Upgrade to stable tauri #451
-- Improve performance of invites #450
-- Update JS bundle:
-  - Fix Dropdown input bug
-  - Fix autogrow textarea bug
-
-## [v0.32.1] - 2022-06-15
-
-- Fix issue when creating invite for chatroom #413
-- Add OpenTelemetry suport #416
-- Fix `remove` Commit command #417 (thanks @rasendubi!)
-- Make tests less flaky by removing the `Store` in `Agent:to_resource` #430
-- Update JS bundle
-
-## [v0.32.0] - 2022-05-22
-
-- **Warning**: Various default directories have moved (see #331). Most notably the `data` directory. The location depends on your OS. Run `show-config` to see where it will be stored now. If you have data in `~/.config/atomic/db`, move it to this new directory. Also, the search index will have to be rebuilt. Start with `--rebuild-index`.
-- Updated various dependencies, and made `cargo.toml` less restrictive.
-- Handle `previousCommit`. This means that Commits should contain a reference to the latest Commit.
-- Remove `async-std` calls from `upload.rs`
-- Added `reset` and `show-config` commands to `atomic-server`.
-- Added `data-dir` flag
-- Replaced `awc` with `ureq` #374
-- Get rid of `.unwrap` calls in `commit_monitor` #345
-- Make process management optional #324 #334
-- Auto-update desktop distributions using Tauri #158
-- Internal migration logic for inter-version compatibility of the database. Makes upgrading trivial. #102
-- Use commits in populate and init
-- Fix bug when opening the same invite twice with the same agent
-- Update atomic-data-browser, deal with new commits, add chatrooms
-- Add `Store::set_handle_commit`. Changes how Commits are internally processed. Now, users of `atomic_lib` can pass a custom handler function. This can be used to listen to events. #380 #253
-- Added ChatRoom functionality. #373
-- Add `push` option to Commits, which allows for efficient manipulation of ResourceArrays. Remove `Resource::append_subjects` method in favor of `push_propvals` #289.
-- Add `append` right, only allows creating children #381.
-- Fix logic for updating indexes. Sometimes atoms were ignored. #392 #395
-
-## [v0.31.1] - 2022-03-29
-
-- Host the data-browser assets / JS bundles from `atomic-server`'s binary #185
-- Allow reading Commits #307
-- Upgrade `actix`, `clap` and `tauri` dependencies #301
-- No `Mutex` for `Appstate` in server #303
-- Removed system tray from `atomic-server`, since I only want to maintain the Tauri version
-- Rename `src-tauri` to `desktop` and make the tauri code part of the cargo workspace
-- In Queries, respect a `limit` of `None` and `include_external` #317
-- Run end-to-end tests from `atomic-data-browser` in `atomic-server` CI #204
-- Use `nextest` for testing #338
-- Improve and monitor test coverage #337
-- Fix commit indexing #345
-
-## [v0.31.0] - 2022-01-25
-
-- Huge performance increase for queries! Added sortable index, big refactor #114
-- Added `store.query()` function with better query options, such as `starts_at` and `limit`. Under the hood, this powers `Collection`s,
-- `Resource.save` returns a `CommitResponse`.
-- Refactor `Commit.apply_opts`, structure options.
-- Remove the potentially confusing `commit.apply` method.
-- `store.tpf` now takes a `Value` instead of `String`.
-- Improved sorting logic. Still has some problems.
-
-## [v0.30.4] - 2022-01-15
-
-Run with `--rebuild-index` the first time, if you use an existing database.
-Note that due to an issue in actix, I'm unable to publish the `atomic-server` crate at this moment.
-You can still build from source by cloning the repo.
-
-- Improve performance for applying commits and updating index (from ca. 50ms to <1ms), refactor value index #282
-- More tracing / logging insights
-- More search results for authorized resources #279
-- Fix panic on unwrapping multipart upload
-- Improve tauri dev UX
-
-## [v0.30.3] - 2021-12-31
-
-- Fix HTTPS initialization
-- Add `--server-url` option
-- Improved logs (better fitting level options, less verbose by default)
-- rename `base_url` to `server_url`
-
-## [v0.30.2] - 2021-12-30
-
-- Update to actix v4, get Tauri to work again #246
-
-## [v0.30.1] - 2021-12-28
-
-- Replace `log` with `tracing` for structured logging and add tracing to `atomic-lib`, enables better (performance) diagnostics #261
-- Add `--log-level` option #261
-- Add `--trace-chrome` option #261
-- Correct 404 status code
-- Server-Timings header #256
-- Added various endpoints as resources #259
-- Show version, author and description in cli tool
-- Fix indented welcome message in generated Drive
-
-## [v0.30.0] - 2021-12-22
-
-- Add file uploading and downloading #72
-- Reverted to earlier Actix build, which unfortunately also means you have to wait longer for the Tauri desktop version of Atomic-Server #246
-- Stricter authorization checks for Invites #182
-- Add expires at check to Invites #182
-- Add github CI action for Tauri Builds #221
-- Add `append_subjects` method to Resource, helps dealing with arrays
-- Running `--initialize` is non-destructive - rights to the Drive are only added, not removed.
-- Stricter collection authorization #247
-- Improved `check_rights` API #247
-- Make Agents public by default, required for authentication process #247
+### @tomic/lib
 
-## [v0.29.2] - 2021-12-10
+- Always fetch all resources after setting + authenticating new agent with websockets #686
 
-- Desktop build (using Tauri) with system tray, icon, installers, menu items. #215
-- Upgraded Actix to latest (needed for Tauri due to usage of Tokio runtime) #215
-- Allow Agents to write and edit themselves #220
-- Less collections for first-time users #224
-- Sort collections by subject by default
-- Set default port to 9883 instead of 80 #229
+## v0.36.1
 
-## [v0.29.0]
+### @tomic/svelte
 
-- Add authentication to restrict read access. Works by signing requests with Private Keys. #13
-- Refactor internal error model, Use correct HTTP status codes #11
-- Add `public-mode` to server, to keep performance maximum if you don't want authentication.
+- Add support for types generated by @tomic/cli
 
-## [v0.28.2]
+### @tomic/react
 
-- Full-text search endpoint, powered by Tantify #40
-- Add RDF-Search usecase (enables re-use of this server as search service for Solid pods)
-- Add `enum` support using the `allows-only` Property. #206
+- Proxy resource objects instead of cloning them for reactivity.
 
-## [v0.28.1]
+### @tomic/cli
 
-- Fix docker env issue #202
-- Fix docker image by switching `heim` with `sysinfo` #203
-- Fix path ENV variables
-- Fix logging while terminating existing process
+- Fix bug where an externals.ts file was generated for properties that are already available through @tomic/lib.
 
-## [v0.28.0]
+### @tomic/lib
 
-- **IMPORANT**: before upgrading to this version, export your database using your previous version: `atomic-server export`. The database could become corrupted when running the new version.
-- Refactor internal `Value` model and add Nested Resource parsing #195
-- Added tests, improved some documentation
-- Fix indexing commits #194
-- Add more control over adding resources with `Store.add_resource_opts()`
+- `Collection` is now an async iterator
+- Added `getAllMembers` method to `Collection`
+- Fix `set` call with equal arrays #715
+- Fix ontologies export bug #728
 
-## [v0.27.2]
+## v0.36.0
 
-- Make HTTPS optional #192
-- Fix parsing .env file
+### Atomic Browser
 
-## [v0.27.1]
+- Add table editor #639. Add resource instances using table columns, add properties as rows, paste and copy CSV, keyboard support, sorting.
+- Add ontology editor #648. Easily create classes, properties and visualize their relationships.
+- Show resource usage (incoming links) in data view.
+- New resource selector that uses searchbox #677
+- Sidebar redesign
+- Switch to current drive button #681
 
-- Fix bootstrapping issue #193
+### @tomic/lib
 
-## [v0.27.0]
+- Add support for typed resources through `resource.props`, powered by `@tomic/cli` (see below)
+- When saving a resource whose parent has not yet been saved we now add them to a batch that gets saved later when the parent is saved.
+- The `scope` option in `SearchOpts` has changed to `parents` and now accepts an array of subjects instead of a single subject.
+- BREAKING: Removed `getCommitBuilder()` method from `Resource`
+- Added `hasUnsavedChanges()` method to `Resource`
+- Fix bugs in state management: proxy resources instead of clone (for react) #682 #675 #657
 
-- **IMPORANT**: before upgrading to this version, export your database using your previous version: `atomic-server export`. The database could become corrupted when running the new version.
-- Include Resources in Collection responses, improving performance dramatically for collections #62
-- Introduce `incomplete` resources
-- Update `get_resource_extended`, allow specify whether to calculate nested resources.
-- Sort `children` in hierarchies.
-- Sort `export` output - first export Properties, fixing #163
-- Add `only-internal` to `export` CLI command in `atomic-server`.
+### @tomic/cli
 
-## [v0.26.3]
+- **NEW**
+- Generate typescript files from ontologies #665
 
-- Many `atomic-server` CLI improvements. Add options as flags, without needing environment variables. #154
+## 0.35.1
 
-## [v0.26.2]
+### Atomic Browser
 
-- Add `setup-env` command to `atomic-server` for creating a `.env` file #154 #187
-- Remove analytics in server
-- Make `asset-url` and `script` in HTML template customizable. #189
+- Improve performance collapsed sidebar items.
+- Add article view #319
+- Add resource history view
+- New subjects have nested paths by default
 
-## [v0.26.1]
+### @tomic/lib
 
-- Improved error message for hierarchy authorization check #178
-- Fix Property `recommends` #177
-- Refuse commits with query parameters in their subjects #179
-- Add `resource.destroy()` method, which uses commits
-- Improve killing existing processes - wait until other process has stopped #167
-- Make `atomic-cli` smaller (don't use `db` feature from `atomic-lib`)
+- BREAKING: `buildSearchSubject` now takes a serverURL instead of the store.
+- Fix bug where @tomic/lib would not work in a non-browser context.
+- Add `resource.getHistory` method that returns a list of previous versions of the resource.
+- Add `store.getResourceAncestry` method, which returns the ancestry of a resource, including the resource itself.
+- Add `resource.title` property, which returns the name of a resource, or the first property that is can be used to name the resource.
+- `store.createSubject` now accepts a `parent` argument, which allows creating nested subjects.
 
-## [v0.26.0]
+## v0.35.0
 
-- Added WebSockets support for live synchronization / real-time updates with the front-end #171
-- Update index after `destroy`ing a resource #173
+### @tomic/browser
 
-## [v0.25.7]
+- Move static assets around, align build with server and fix PWA #292
+- Add `useChildren` hook and `Store.getChildren` method
+- Add new file preview UI for images, audio, text and PDF files.
+- Add new file preview types to the folder grid view.
+- Fix Dialogue form #308
+- Refactor search, escape query strings for Tantivy
+- Add `import` context menu, allows importing anywhere
 
-- Improve process ID functionality #167
-- Improve invite URL
+### @tomic/react
 
-## [v0.25.6]
+- Add more options to `useSearch`
 
-- Fix domain .env #169
-- Fix HTTPS port bug
+### @tomic/lib
 
-## [v0.25.5]
+- Add `Store.parseMetaTags` to load JSON-AD objects stored in the DOM. Speeds up initial page load by allowing server to set JSON-AD objects in the initial HTML response.
+- `store.createSubject` allows creating nested paths
+- Add `Store.postToServer` method, add `endpoints`, `importJsonAdString`
+- Add `store.preloadClassesAndProperties` and remove `urls.properties.getAll` and `urls.classes.getAll`. This enables using `atomic-data-browser` without relying on `atomicdata.dev` being available.
+- Fix Race condition of `store.getResourceAsync` #309
+- Add `buildSearchSubject` in `search.ts` which allows you to build full text search queries to send to Atomic-Server.
+- Add `importJSONADString` function, allowing you to import resources from external sources.
 
-- Check and terminate running instances of `atomic-server` when running instance #167
+## v0.35.0-beta.1
 
-## [v0.25.4]
+### @tomic/react
 
-- Add flags for `reindex` and `init`
-- Improve CI for automated tests & builds #165
+#### Breaking changes
 
-## [v0.25.3]
+- Remove `initAgentFromLocalStorage()`.
+- No longer save agent to local storage.
+
+### @tomic/lib
+
+- Add the ability to change the `fetch` function used to fetch resources over http.
+- `store.addResource` is depricated in favor of `store.addResources`.
+- Add `AgentChange` event on store that is fired whenever the stores agent changes.
+- `store.fetchResourceFromServer` now returns the requested resource.
+- Add `postCommit` method to `store` that respects the injected `fetch` function.
+
+#### Breaking Changes:
+
+- `uploadFiles()` has moved to `store.uploadFiles()`.
+- Remove `Agent.fromJSON()`
+- `tryValidURL` and `isValidURL` are now static methods on `Client` and have been renamed to `tryValidSubject` and `isValidSubject`.
+- Rename `store.fetchResource` to `store.fetchResourceFromServer`.
+- Rename `store.handleError` to `store.notifyError`.
+- Rename `agent.checkPublicKey` to `agent.verifyPublicKeyWithServer`.
+- Remove `store.errorHandler` and replace with new `StoreEvents.Error` event.
+
+## v0.34.10
+
+- Don't use WebSocket in Node context #280
+
+## v0.34.9
+
+- Fix @tomic/lib exports for non-ts contexts #270
+- Fix back / forward buttons in desktop build #263
+- Fix `isOffline` for node
+
+## v0.34.0
+
+- Add folders with list & grid views, allow drag & drop uploads #228
+- Show icons in sidebar
+- Add scoped search, funded by NGI NLnet Discovery #245 #254
+- Make web app installable #30
+- Add cookie based authentication #241
+- Get rid of `useWindowSize` #256
+- `canWrite` check should succeed for `publicAgent` #252
+- Improve error look & text
+
+## v0.32.1
+
+- Lock ed25519 version #230
+
+## v0.32.0
+
+### Breaking changes
+
+- Changed `null` to `undefined` in many places
+- `useTitle` returns an `array` with a `setTitle` function, similar to `useState`
+- `resource.getError()` is deprecated in favor or `resource.error`
+
+### New
+
+- Add Hierarchy in sidebar #75
+- Add DriveSwitcher #209
+- Add `new drive` option
+- Add `EventManager` to run custom functions when resources are added / edited / etc.
+- Add dialog / modal view #24 #181
+- Add bookmark import / reader mode #187
+
+### Fixes & improvements
+
+- Stricter non-null checks, improved typings #220
+- Switch from `yarn` to `pnpm` #210
+- Various improvements to Dropdown forms #194
+- Fix crash in circular parent rendering
+- Fix race condition #189
+- Make all titles editable #199
+- Don't subscribe to search endpoint #200
+- Refactor e2e tests
+- Render floats
+- Hide unsortable items in tables
+- Fix dropdown resource select input #222
+
+## v0.31.1
+
+- Fix Dropdown input bug
+- Fix autogrow textarea bug
+
+## v0.31.0
+
+- Add ChatRooms #153
+- Improve UX for creating new Resources, instantly open new ChatRooms and Documents
+- Refer to `previousCommit`s in Commits #140
+- Disable websockets out of browser context for `@tomic/lib`
+- Fix NPM builds for `@tomic/lib` and `@tomic/react` in non-ts environments #155
+- tauri back buttons, new tab external links #115
+- Fix concurrency issue with commits #91
+- Make bugsnag optional #133
+- Add `parseCommit` function
+- Use `href` attribute in sidebar menu #148
+- Use relative links in About page #149
+- Show `CommitDetail` that displays audit info (creator, edit date) #145
+- Prevent using `localhost` Agents for external Servers
+- Implement `push`, for appending new Resources to (existing) Arrays in Commits.
+- Replace snowpack with vite #156
+- Use yarn v2 and replace lerna #105
+- Prevent default actions for keyboard shortcuts
+- Improve cross-OS keyboard shortcuts compatibility (cmd & ctrl, option & alt)
+- Fix markdown being shown shortly
 
-- Improve ease of initial setup with initial invite on `/setup` #159 and welcoming descriptions for first Drive and Invite.
+## v0.30.6 to 9
 
-## [v0.25.2]
+- Don't use WebSockets if they're not supported #131
+- Fix `@noble` build issues
 
-- Fixes caching bugs for collections introduced by #14
-- Fix external resources in Collections #161
+## v0.30.5
 
-## [v0.25.1]
+- Switch to `dnd-kit` for drag and drop #92
+- Improved views for external resources in Documents
+- Add upload dropzone to documents
+- Replace `react-helmet` with `react-helmet-async`
 
-- Add Value indexing, which speeds up TPF queries / collections tremendously #14
-- Add models for Document editor
-- Improve commit authorization checks - allow new resources with existing parents
+## v0.30.4
 
-## [v0.24.2]
+- `@tomic/react` can now be used without `@tomic/lib` - it re-exports the library
+- More performant subject updates in new resource form
+- Allow `@tomic/lib` to be used in non-browser (Node) context #128
+- Add `useMarkdown` function to `@tomic/react`
+- Make search result previews smaller
+- Fetch full collections when showing CollectionCard
+- `useResource` defaults to not accepting incomplete resources
+- Add `sign in` button to invite form
+- Rename `baseUrl` to `serverUrl`
+- Add `useServerSearch` to `@tomic/react`
+- Improve UX in Tauri (desktop) mode
+  - Regular Links open in your browser, instead of in Atomic
 
-- Fix `/path` endpoint return values #143
-- Add ASCI logo in terminal on boot
-- Fix getting resources from server's `/commit` path #144
-- Fix cache-control header issue when opening a closed tab #137
-- Add collection properties `name`, `sortBy` and `sortDesc` #145
-- Extract `apply_changes` from `apply_commit`, make versioning safer and more reliable #146
-- Remove AD3 remnants, clean up code #148
-- TPF endpoint supports JSON-AD #150
-- Custom serializations in `atomic-cli tpf`
+## v0.30.0
 
-## [v0.24.1]
+- Add File management views. Preview images and videos, download them. #121
+- Add `uploadFiles` method to @tomic/lib. #121
+- Add upload field to forms #121
+- Fix bug resourcearray input #123
+- Add WebMonetization support #124
 
-- Add write rights to Agent itself on accepting Invite
-- Fix RDF serialization for dynamic resources #141
-- Update and check Usages for Invites #134
-- Make names for agents optional
-- Move shortname property always to first one
+## v0.29.2
 
-## [v0.24.0]
+- Add Share settings screen where you can see & edit rights / access control #113
+- Add Invite form #45
+- Convert Classes to typescript interfaces. Show button for this in Class view. #118
+- `Create new resource` button on Drive
+- Show multiple parents in breadcrumbs
+- Refresh collection on opening page
+- Don't auto-accept invites
+- Improve server switcher design
+- Change default port of localhost to 9883 ([issue](https://github.com/atomicdata-dev/atomic-data-rust/issues/229))
 
-- [Hierarchy](https://docs.atomicdata.dev/hierarchy.html) with breadcrumbs and easy to use navigation #134
-- Authorization using Hierarchy, which means you can add write & read permissions anywhere in a hierarchy.
-- Invites to invite new and existing users to read / edit a bunch of resources. Test it [here](https://atomicdata.dev/invites/1).
+## v0.29.1
 
-## [v0.23.5]
+- Small fix
 
-- Build using esbuild instead of webpack #31
-- Some documentation improvements
-- Remove `createdAt` from Agent model required fields
-- Fix `n-triples` content type negotiation
+## v0.29.0
 
-## [v0.23.4]
-
-- Fix deadlock in `cli new` command #124
-- Added boolean, timestamp and unsupported fallback to `cli new` command #30
-- Fix CLI input `server` - no subcommand required for running
-
-## [v0.23.3]
-
-- Added import / export to server and lib #121
-- Added basic cli functionality with Clap to server #125
-- Added multi-resource JSON-AD array parsing #123
-- Use JSON-LD as default store #79
-
-## [v0.23.2]
-
-- Removed all HTML rendering from `atomic-server` (since we're using `atomic-data-browser`).
-- Changed how config paths are calculated and shared.
-- Remove the need for having the `./static` folder #118 when running `atomic-server`, moved to config dir.
-- Add `open config` to tray icon
-- Updated `atomic-cli` path, no longer requires quotes
-
-## [v0.23.0]
-
-- Added versioning #42
-- Added endpoints #110 #73
-- Moved `/path` logic to `atomic-lib` as endpoint #110
-- `get_extended_resource` is now DB only #110
-- Correct response codes (404) #105
-- Improved .html page (+PWA support and Matomo tracking)
-- Upgraded various dependencies
-
-## [v0.22.4]
-
-- Reject commits if they are editing a non-owned resource #106
-- Correct response codes (404) #105
-
-## [v0.22.3]
-
-- Use atomic-data-browser js frontent by default #103
-
-## [v0.22.2]
-
-Warning: existing databases will _not_ work with this version.
-
-- Fix deleting items #101
-- Add a datatype for floats #93.
-
-## [v0.22.1]
-
-- Switch to JSON-AD parsing & serialization for Commits #100
-
-## [v0.22.0]
-
-Warning: existing Agents and Commits will no longer work. Be sure to create new ones.
-
-- Change Commit serialization to [match atomic-data-browser](https://github.com/atomicdata-dev/atomic-data-browser/issues/3) implementation #98.
-
-## [v0.21.1]
-
-- Permissive CORS #92
-
-## [v0.21.0]
-
-- Add JSON-AD serialization #79, use it in Commits
-- Servers are aware of their own URL #51
-- Improved CLI edit feature, more flexible (create new resources if none exist, fix newlines)
-- Add `resource.save_locally()`
-
-## [v0.20.4]
-
-- Fix array length bug in paths
-- Add docker link to homepage
-- Add system tray icon #75
-- Removed `ResourceString`
-- Improved WASM compliance #76
-- Add ARM Docker compatibility #80
-- Remove dead dependency #82
-- CLI commit commands shortname fix #83
-- rename `set_propval_by_shortname` to `set_propval_shortname`
-
-## [v0.20.3]
-
-- Added persistence to server docker image #70
-- Improved default Agent setup for server
-
-## [v0.20.1]
-
-- Improved error handling in cli
-- Added tests for cli #67
-- Fixed generated addresses `localhost/collection` vs `localhostcollection`
-- Added dockerfile for server #69
-
-## [v0.20.0]
-
-- Huge refactor of internals. Got rid of all string representations for Atoms, so store should only contain valid data. All Resources have all required props, and data is of the correct datatype.
-- `Resource.save()` can be called! Easy way to store changes, both locally and externally.
-- Added collection sorting #63
-
-## [v0.19.0]
-
-- Added table view for `atomic-server` #53
-- Changed many methods from the `Resource` API to fix some ownership / trait object issues #45. `Resource` no longer has an internal reference to `Store`, so it needs an explicit store in most methods.
-
-## [v0.18.0]
-
-- Atomic-cli 0.18.0 allows for instantiating new Resources, whilst creating commits! It also re-introduces the TPF query.
-
-## [v0.17.1]
-
-- Atomic-server 0.17.1 now automatically renews HTTPS certificates on boot, if needed.
-
-## [v0.17.0]
-
-- `atomic-cli` can now edit data securely on an `atomic-server` #41 #13
-- Root agent is automatically generated #38
-- Convenient Collections (such as a list of all Commits, Classes, Agents, etc.) are generated for every store on `populate()`. #43
-- Fixed some props for Collections and Commits
-
-## [v0.15.0]
-
-- Add dynamic collections with pagination #36 #17
-- Refactor Db to use native values, for allowing nested resources #16
-- Atomic Commits using deterministic serialization and cryptographic signatures #26 #24 #27 #31
-- Recognize filetypes in URL #33
-
-## [v0.13.0]
-
-- Save reference to Store inside Resource #19
-- No more &muts #18 #15
-
-## [v0.12.1]
-
-- Adds HTTPS auto certificate support
+- Add authentication: sign requests, so the server knows who sent it. This allows for better authorization. #108
+- Refactor Error type, improve Error page / views
+- Automatically retry unauthorized resources (but I want a prettier solution, see #110)
+- `useResource` no longer returns an array, but only the resource.
+- Improved EndpointPage (show results, useful for Search, for example)
+
+## v0.28.2
+
+- Added server-side full text search #106
+- Add a seperate document show page #2, improved performance in Documents
+- Improved `canWrite` hook (more stable, faster)
+- Improved sidebar performance (less re-renders)
+
+## v0.28.0
+
+- Improve styling tables and sort dropdown
+- It's mostly an `atomic-server` version bump :)
+
+## v0.27.2
+
+- Fix setting Agent bug
+- Add constructor to Store
+
+## v0.27.1
+
+- Include all Properties and Classes in the initial view, speeding up the app even further. #65
+
+## v0.27.0
+
+- Parse nested, named JSON-AD resources #98
+- Refactor resource status - remove `Resource.status`, prefer `.loading` and `.error`
+- Add loading and error status to Property class, include in `useProperty`
+- Improve loading and error states for various components
+- Refactor `store.getResourceLoading`, `store.fetchResource`, `useResource` - add option to `acceptIncomplete`.
+
+## v0.26.2
+
+- Add [Typedoc documentation](https://atomic-docs.netlify.app/) #100
+- Fix bug not showing resource form fields
+- Fix circular parent handling in `canWrite`
+- Update references to changed resources #102
+- Use `ws` instead of `wss` for HTTP connections
+
+## v0.26.1
+
+- Fix `wss` websockets
+- Update typescript type exports
+
+## v0.26.0
+
+- Added WebSockets for live synchronization with server #80
+- Add Commit parsing #80
+- Custom fonts
+- Prevent re-applying locally defined commits #90
+- Fix race condition commits #91
+- Added `opts` parameter to react hooks
+- Simplify internal Value model (better performance, less bugs) #88
+
+## v0.25.4
+
+- Fix bugs when setting Agent, validate public key before setting
+- Add integration / end to end tests #70
+
+## v0.25.0
+
+- Add Document editor ([demo](https://atomicdata.dev/invite/ycj661fdce8)) #2
+- Improved performance and less concurrency bugs while quickly saving resources
+- Improve styling (soft background on light mode)
+- Add baseURL settings page + edit function in top left
+
+## v0.24.2
+
+- Improve resource selector dropdown, show previews, remove dependency #60
+- Add toast notifications #63
+- Enable `resource.save()` with custom agent
+- Add JSON AD array parser
+- ~~Add `default_store.json` resource to the browser to make things snappier~~ removed
+- Improve type checking for value initialization and serialization types
+- Improve view for nested resources
+
+## v0.24.0
+
+- Match version number of [atomic-data-rust](https://github.com/atomicdata-dev/atomic-data-rust)
+- Add Version button to menu
+- Disable menu buttons that are not usable
+- Improve error view in cards
+- Only show plus icon in suitable collections
+
+## v0.0.12
+
+### atomic-data-browser
+
+- Fix tests
+- Cleaned up Resource form #51
+- Handle usages left in Invites #45
+- Add social meta tags #44
+- Add fetch as JSON / JSON-AD / Turtle and more to data pages
+- Fix bug with invites
+- Various styling improvements
+- Add Atomic Data Logo
+- Dark mode syncs with user
+- Scroll to top on page change #47
+- Improve keyboard shortcuts for edit / data view #52
+- Move Agent settings to sidebar item
+- Add rights check
+- Change routes and settings structure
+- Add Disabled state to form fields
+- Improved hotkey handling
+- Fix edit subject in resource form
+
+### @tomic/react
+
+- Resources will update when properties change (notify listeners on update)
+- clean up package.json / dependencies
+- Add rights check hook
+
+### @tomic/lib
+
+- Add `getCommitBuilder` and `hasChanges` function to `resource` and `commitBuilder`
+- Add rights check to resource
+
+## v0.0.11
+
+- Split packages, switch to monorepo
+- Publish `@tomic/lib` and `@tomic/react` libraries to npm
+- Add changelog

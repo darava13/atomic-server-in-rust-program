@@ -1,12 +1,21 @@
 {
-    "extends": "../tsconfig.build.json",
     "compilerOptions": {
-        "composite": true,
-        "outDir": "./dist",
-        "rootDir": ".",
+        "paths": {
+            "@tomic/lib/*": [
+                "./lib/src/*"
+            ],
+            "@tomic/react/*": [
+                "./react/src/*"
+            ]
+        },
     },
-    "include": [
-        "./src"
-    ],
-    "references": []
+    "files": [],
+    "references": [
+        {
+            "path": "lib"
+        },
+        {
+            "path": "react"
+        }
+    ]
 }
