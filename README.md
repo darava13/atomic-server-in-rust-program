@@ -1,111 +1,46 @@
-# `atomic-cli`
+# Views Readme
 
-[![crates.io](https://img.shields.io/crates/v/atomic-cli)](https://crates.io/crates/atomic-cli)
-[![Discord chat](https://img.shields.io/discord/723588174747533393.svg?logo=discord)](https://discord.gg/a72Rv2P)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![github](https://img.shields.io/github/stars/atomicdata-dev/atomic-server?style=social)](https://github.com/joepio/aget_basetomic)
+Views are a special type of components.
+They are the ones rendering the actual Resources.
+Views render only one or more classes.
+If there is no View available for a specific Class, it will fall back to the `ResourceX` component (e.g. `ResourceCard`).
 
-_Status: Beta. [Breaking changes](../CHANGELOG.md) are expected until 1.0._
+Some notes:
 
-**A command-line application to create, read and interact with Atomic Data.**
+- Every View is passed a `Resource` property. Some ViewType have additional properties, which should be documented here.
+- When naming a View, use the `ClassnameViewType.tsx` naming convention (e.g. `PersonCard`).
+- When adding a ViewType, document it here and implement a generic Resource renderer. Also make sure that it has error handling and adds the `about` RDFa attribute.
+- Views starting with `Resource` in the name are responsible for registering the other class specific Views.
 
-Designed and tested to work with [atomic-server](https://crates.io/crates/atomic-server/).
+## View Types
 
-```
-atomic-cli 0.23.2
-Joep Meindertsma <joep@ontola.io>
-Create, share, fetch and model Atomic Data!
+Since views will occur in some context (e.g. full page vs inside a small card), they need to be registered for a certain View Type.
+The following view types currently exist, from large to small:
 
-USAGE:
-    atomic-cli [SUBCOMMAND]
+### Page
 
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+A full page Resource.
+This is what is shown when opening the URL of the resource.
 
-SUBCOMMANDS:
-    destroy    Permanently removes a Resource.
-    edit       Edit a single Atom from a Resource using your text editor.
-    get        Get a Resource or Value by using Atomic Paths.
-    help       Prints this message or the help of the given subcommand(s)
-    list       List all bookmarks
-    new        Create a Resource
-    remove     Remove a single Atom from a Resource.
-    set        Update a single Atom. Creates both the Resource if they don't exist. Overwrites existing.
+### Card
 
-Visit https://atomicdata.dev for more info
-```
+A smaller, contained version. Shown in grid views and in search results.
 
-## Installation
+Properties:
 
-You can install `atomic-cli: in multiple ways:
+- `small`: boolean. Will hide even more elements.
+- `selected`: boolean. Adds a border to the item.
 
-### Using [Cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html)
+### Line
 
-```sh
-cargo install atomic-cli
-```
+A Resource inside a single (full width) line.
+Used in lists.
 
-### Build from source
+### Inline
 
-```sh
-git clone git@github.com:atomicdata-dev/atomic-server.git
-cd atomic/cli
-# Install atomic to path
-cargo install --path ./
-```
+Can appear inside a sentence of text, or inside a table.
+One of the smallest View Types.
 
-## Usage
+## Adding a new View
 
-Run `atomic-cli command --help` for mor information about specific commands.
-
-The write commands (`set`, `remove`, `edit`, `destroy`) require some authentication config, which needs to match with the target [atomic-server](https://crates.io/crates/atomic-server).
-It will read the `~/.config/atomic/config.toml` file, and create one using some prompts if it is not yet present.
-
-## Features
-
-- A `list` command for showing local bookmarks (mappings)
-- A `get` command for finding resources and parts of data using Atomic Paths with various serialization options (JSON, JSON-AD, JSON-LD, Turtle, N-Triples, Pretty). Also supports [path traversal](https://docs.atomicdata.dev/core/paths.html).
-- `set`, `remove`, `destroy` and `edit` commands that send commits.
-- A `new` command for instantiating [Atomic Classes](https://docs.atomicdata.dev/schema/classes.html)
-
-## Config
-
-Atomic creates a `~/.config/atomic` folder, which contains a `mapping.amp` and a `db`.
-This folder is also used by `atomic-server`.
-
-## Mapping
-
-The Mapping refers to your user specific set of shortname-URL combinations.
-This Mapping lives as a simple text file in `./user_mappping.amp`.
-
-```
-person=https://atomicdata.dev/classes/Person
-```
-<!--
-## What this should be able to do
-
-This serves as a UX story that guides the development of this CLI.
-
-```sh
-# Add a mapping, and store the Atomic Class locally
-# NOT YET SUPPORTED
-$ atomic map person https://example.com/person
-
-# Create a profile for yourself
-$ atomic new person
-# By default, atomic creates IFPS resources for your created data, which are publicly stored
-# NOT YET SUPPORTED
-Created at: ipfs:Qwhp2fh3o8hfo8w7fhwo77w38ohw3o78fhw3ho78w3o837ho8fwh8o7fh37ho
-# Add a mapping for your newly created resource, so you can use that shortname instead of the long IPFS url.
-bookmark (optional): shortname
-
-# Instead of link to an Atomic Server where you can upload your stuff
-# If you don't, your data exists locally and gets published to IPFS
-# NOT YET SUPPORTED
-$ atomic setup
-# install ontologies and add their shortnames to bookmarks
-$ atomic install https://atomicdata.dev/ontologies/meetings
-# when no URL is given, use the Ontola repo's ontologies
-$ atomic install meetings
-``` -->
+Depending on the ViewType, make sure to add your new component to the respective `switch` statement in e.g. `ResourcePage` or `ResourceCard`.
