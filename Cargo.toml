@@ -1,35 +1,26 @@
 [package]
-authors = ["joep@ontola.io"]
-build = "src/build.rs"
-description = "Atomic Server - Tauri desktop"
+authors = ["Joep Meindertsma <joep@argu.co>"]
+description = "CLI tool to create, store, query, validate and convert Atomic Data"
 edition = "2021"
 license = "MIT"
-name = "atomic-server-tauri"
+name = "atomic-cli"
+readme = "README.md"
 repository = "https://github.com/atomicdata-dev/atomic-server"
-version = "0.36.0"
-
-[build-dependencies]
-[build-dependencies.tauri-build]
-features = []
-version = "1"
+version = "0.36.1"
 
 [dependencies]
-actix-rt = "2.6.0"
-serde_json = "1.0"
+atomic_lib = {version = "0.36.1", path = "../lib", features = ["config", "rdf"]}
+clap = {version = "4", features = ["cargo"]}
+colored = "2"
+dirs = "4"
+edit = {version = "0.1", optional = true}
+promptly = "0.3"
+regex = "1"
 
-[dependencies.atomic-server]
-# We don't need HTTPS for desktop usage
-default-features = false
-path = "../server"
-
-[dependencies.serde]
-features = ["derive"]
-version = "1.0"
-
-[dependencies.tauri]
-features = ["api-all", "system-tray", "updater"]
-version = "1"
+[dev-dependencies]
+assert_cmd = "2"
 
 [features]
-custom-protocol = ["tauri/custom-protocol"]
-default = ["custom-protocol"]
+default = ["native"]
+# Non-wasi interface. These features cannot be compiled to WASI.
+native = ["edit"]

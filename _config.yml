@@ -1,9 +1,4 @@
-plugins:
-  - jekyll-relative-links
-relative_links:
-  enabled: true
-  collections: true
+# This is a fix for making sure github pages serves the doc pages
 include:
-  - README.md
-  - LICENSE.md
-  - CONTRIBUTING.md
+  - "_*_.html"
+  - "_*_.*.html"
