@@ -1,26 +1,60 @@
-#!/usr/bin/env node
-/* eslint-disable no-console */
+/**
+ * # @tomic/lib Documentation
+ *
+ * Core typescript library for handling JSON-AD parsing, storing Atomic Data,
+ * signing Commits, and more.
+ *
+ * [github repository](https://github.com/atomicdata-dev/atomic-data-browser)
+ *
+ * ## Features
+ *
+ * - Fetching Atomic Data
+ * - Parsing JSON-AD
+ * - Storing Atomic Data
+ * - Data Validation
+ * - Creating and signing {@link Commit}
+ *
+ * ## Usage
+ *
+ * You'll probably want to start by initializing a {@link Store}. Use methods
+ * from the Store to load Resources. Use the {@link Resource} class to access,
+ * edit and validate the data in a Resource. Use `Resource.save()` to save and
+ * send edits to resources as Commits, or use the {@link Commit} class if you
+ * need more control.
+ *
+ * ## Usage with react
+ *
+ * See `@tomic/react`, which provides various hooks for easy data usage.
+ *
+ * @module
+ */
 
-import chalk from 'chalk';
-import { usage } from './usage.js';
+import { initOntologies } from './ontologies/index.js';
 
-const command = process.argv[2];
+initOntologies();
 
-const commands = new Map<string, () => Promise<void>>();
+const __INTERNAL_KNOWN_SUBJECTS = new Set<string>();
 
-commands.set('ontologies', () =>
-  import('./commands/ontologies.js').then(m =>
-    m.ontologiesCommand(process.argv.slice(3)),
-  ),
-);
-
-commands.set('init', () =>
-  import('./commands/init.js').then(m => m.initCommand(process.argv.slice(3))),
-);
-
-if (commands.has(command)) {
-  commands.get(command)?.();
-} else {
-  console.error(chalk.red('Unknown command'), chalk.cyan(command ?? ''));
-  console.log(usage);
-}
+export * from './ontologies/core.js';
+export * from './ontologies/collections.js';
+export * from './ontologies/commits.js';
+export * from './ontologies/dataBrowser.js';
+export * from './ontologies/server.js';
+export * from './agent.js';
+export * from './authentication.js';
+export * from './class.js';
+export * from './client.js';
+export * from './commit.js';
+export * from './error.js';
+export * from './endpoints.js';
+export * from './datatypes.js';
+export * from './parse.js';
+export * from './search.js';
+export * from './resource.js';
+export * from './store.js';
+export * from './value.js';
+export * from './urls.js';
+export * from './truncate.js';
+export * from './collection.js';
+export * from './collectionBuilder.js';
+export * from './ontology.js';

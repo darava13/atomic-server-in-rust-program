@@ -1,35 +1,38 @@
 {
   "version": "0.36.1",
-  "author": "Polle Pas",
+  "author": "Joep Meindertsma",
+  "description": "Atomic Data React library",
   "dependencies": {
-    "@tomic/lib": "workspace:*",
-    "chalk": "^5.3.0",
-    "prettier": "3.0.3"
+    "@tomic/lib": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^4.8"
   },
-  "description": "",
+  "peerDependencies": {
+    "react": ">17.0.2"
+  },
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
-  "name": "@tomic/cli",
+  "name": "@tomic/react",
+  "main-dev": "src/index.ts",
+  "main": "dist/src/index.js",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "build": "tsc",
-    "lint": "eslint ./src --ext .js,.ts",
-    "lint-fix": "eslint ./src --ext .js,.ts --fix",
-    "prepublishOnly": "pnpm run build && pnpm run lint-fix",
-    "watch": "tsc --build --watch",
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
+    "lint-fix": "eslint ./src --ext .js,.jsx,.ts,.tsx --fix",
+    "prepublishOnly": "pnpm run lint-fix && pnpm run build",
     "start": "pnpm watch",
+    "watch": "tsc --build --watch",
     "tsc": "tsc --build",
     "typecheck": "tsc --noEmit"
   },
-  "bin": {
-    "ad-generate": "./bin/src/index.js"
-  },
+  "source": "src/index.ts",
   "type": "module",
-  "peerDependencies": {
-    "@tomic/lib": "workspace:*"
-  }
+  "types": "dist/src/index.d.ts",
+  "gitHead": "2172c73d8df4e5f273e6386676abc91b6c5b2707"
 }
